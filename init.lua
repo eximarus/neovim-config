@@ -1,0 +1,7 @@
+require("plugins")
+require("treesitter_conf")
+require("lsp_conf")
+require("format_on_save")
+require("settings")
+require("colorscheme")
+require("keymap")
