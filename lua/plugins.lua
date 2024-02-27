@@ -34,9 +34,19 @@ require("lazy").setup({
         lazy = false,
     },
     "JoosepAlviste/nvim-ts-context-commentstring",
+    {
+        'nvim-lualine/lualine.nvim',
+        dependencies = { 'nvim-tree/nvim-web-devicons' }
+    }
 })
 
 vim.g.skip_ts_context_commentstring_module = true
 require('Comment').setup {
     pre_hook = require('ts_context_commentstring.integrations.comment_nvim').create_pre_hook(),
+}
+
+require('lualine').setup {
+    options = {
+        theme = "catppuccin"
+    }
 }
