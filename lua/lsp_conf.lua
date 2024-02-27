@@ -12,14 +12,18 @@ lspconfig.zls.setup {
 }
 lspconfig.gopls.setup {
     capabilities = capabilities,
+    settings = {
+        analyses = {
+            unusedparams = true
+        },
+        staticcheck = true,
+        gofumpt = true,
+    }
 }
 lspconfig.htmx.setup {
     capabilities = capabilities,
 }
 lspconfig.tailwindcss.setup {
-    capabilities = capabilities,
-}
-lspconfig.sqlls.setup {
     capabilities = capabilities,
 }
 lspconfig.clangd.setup {
