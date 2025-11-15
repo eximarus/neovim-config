@@ -1,16 +1,67 @@
-local capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lspconfig = require('lspconfig')
 
-vim.lsp.config('pyright', {
-    capabilities = capabilities,
+lspconfig.lua_ls.setup {
+    on_init = function(client)
+        if client.workspace_folders then
+            local path = client.workspace_folders[1].name
+            if vim.uv.fs_stat(path .. '/.luarc.json') or vim.uv.fs_stat(path .. '/.luarc.jsonc') then
+                return
+            end
+        end
+
+        client.config.settings.Lua = vim.tbl_deep_extend('force', client.config.settings.Lua, {
+            runtime = {
+                version = 'LuaJIT'
+            },
+            workspace = {
+                checkThirdParty = false,
+                library = {
+                    vim.env.VIMRUNTIME
+                }
+            }
+        })
+    end,
+    settings = {
+        Lua = {}
+    }
+}
+
+lspconfig.pyright.setup {}
+
+lspconfig.ts_ls.setup {}
+lspconfig.html.setup {
+    --filetypes = { "html" }
+}
+lspconfig.cssls.setup {}
+lspconfig.jsonls.setup {}
+lspconfig.eslint.setup({
+    on_attach = function(client, bufnr)
+        vim.api.nvim_create_autocmd("BufWritePre", {
+            buffer = bufnr,
+            command = "EslintFixAll",
+        })
+    end,
 })
-vim.lsp.config('tsserver', {
-    capabilities = capabilities,
-})
-vim.lsp.config('zls',{
-    capabilities = capabilities,
-})
-vim.lsp.config('gopls',{
-    capabilities = capabilities,
+
+lspconfig.htmx.setup {}
+lspconfig.tailwindcss.setup {}
+
+lspconfig.zls.setup {}
+lspconfig.clangd.setup {}
+lspconfig.cmake.setup {}
+lspconfig.glsl_analyzer.setup {}
+lspconfig.wgsl_analyzer.setup {}
+lspconfig.slangd.setup {
+    settings = {
+        slang = {
+            format = {
+                clangFormatStyle = '{IndentWidth: 4}'
+            }
+        }
+    }
+}
+
+lspconfig.gopls.setup {
     settings = {
         analyses = {
             unusedparams = true
@@ -18,53 +69,9 @@ vim.lsp.config('gopls',{
         staticcheck = true,
         gofumpt = true,
     }
-})
-vim.lsp.config('htmx',{
-    capabilities = capabilities,
-})
-vim.lsp.config('tailwindcss',{
-    capabilities = capabilities,
-})
-vim.lsp.config('clangd',{
-    capabilities = capabilities,
-})
-vim.lsp.config('cmake',{
-    capabilities = capabilities,
-})
-vim.lsp.config('html',{
-    capabilities = capabilities,
-})
-vim.lsp.config('cssls',{
-    capabilities = capabilities,
-})
-vim.lsp.config('jsonls',{
-    capabilities = capabilities,
-})
+}
+lspconfig.templ.setup {}
 
-vim.lsp.config('lua_ls',{
-    capabilities = capabilities,
-    on_init = function(client)
-        local path = client.workspace_folders[1].name
-        if not vim.loop.fs_stat(path .. '/.luarc.json') and not vim.loop.fs_stat(path .. '/.luarc.jsonc') then
-            client.config.settings = vim.tbl_deep_extend('force', client.config.settings, {
-                Lua = {
-                    runtime = {
-                        version = 'LuaJIT'
-                    },
-                    workspace = {
-                        checkThirdParty = false,
-                        library = {
-                            vim.env.VIMRUNTIME
-                        }
-                    }
-                }
-            })
-
-            client.notify("workspace/didChangeConfiguration", { settings = client.config.settings })
-        end
-        return true
-    end
-})
 
 local cmp = require('cmp')
 cmp.setup({
@@ -80,4 +87,88 @@ cmp.setup({
             require('luasnip').lsp_expand(args.body)
         end,
     },
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.glsl",
+    callback = function()
+        vim.bo.filetype = "glsl"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.vert",
+    callback = function()
+        vim.bo.filetype = "vert"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.tesc",
+    callback = function()
+        vim.bo.filetype = "tesc"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.tese",
+    callback = function()
+        vim.bo.filetype = "tese"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.frag",
+    callback = function()
+        vim.bo.filetype = "frag"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.geom",
+    callback = function()
+        vim.bo.filetype = "geom"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.comp",
+    callback = function()
+        vim.bo.filetype = "comp"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.wgsl",
+    callback = function()
+        vim.bo.filetype = "wgsl"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = { "*.zon", "*.zig" },
+    callback = function()
+        vim.bo.filetype = "zig"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.slang",
+    callback = function()
+        vim.bo.filetype = "shaderslang"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.hlsl",
+    callback = function()
+        vim.bo.filetype = "hlsl"
+    end,
+})
+
+vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
+    pattern = "*.templ",
+    callback = function()
+        vim.bo.filetype = "templ"
+    end,
 })

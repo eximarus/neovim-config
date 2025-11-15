@@ -16,6 +16,8 @@ require 'nvim-treesitter.configs'.setup {
         "hlsl",
         "glsl",
         "zig",
+        "wgsl",
+        "slang",
     },
 
     sync_install = false,
