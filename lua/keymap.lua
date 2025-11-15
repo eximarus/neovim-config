@@ -2,19 +2,25 @@ vim.g.mapleader = " "
 vim.keymap.set("n", "<leader>oe", vim.cmd.Ex)
 vim.keymap.set("n", "<C-s>", vim.cmd.w)
 
-vim.keymap.set("n", "<Tab>", ":bnext<CR>")
-vim.keymap.set("n", "<S-Tab>", ":bprevious<CR>")
+vim.keymap.set("n", "<leader>bn", ":bnext<CR>")
+vim.keymap.set("n", "<leader>bp", ":bprevious<CR>")
+vim.keymap.set("n", "<leader>bd", ":bd<CR>")
+
+vim.keymap.set("n", "j", "jzz", { noremap = true, silent = true });
+vim.keymap.set("n", "k", "kzz", { noremap = true, silent = true });
+vim.keymap.set("n", "<C-d>", "<C-d>zz", { noremap = true, silent = true });
+vim.keymap.set("n", "<C-u>", "<C-u>zz", { noremap = true, silent = true });
 
 vim.keymap.set("v", ">", ">gv")
 vim.keymap.set("v", "<", "<gv")
 
-vim.keymap.set('n', "<a-j>", ":m .+1<cr>==")
+-- vim.keymap.set('n', "<a-j>", ":m .+1<cr>==")
 vim.keymap.set('v', "<a-j>", ":m '>+1<cr>gv=gv")
-vim.keymap.set('i', "<a-j>", "<esc>:m '<+1<cr>==gi")
+-- vim.keymap.set('i', "<a-j>", "<esc>:m '<+1<cr>==gi")
 
-vim.keymap.set('n', "<a-k>", ":m .-2<CR>==")
+-- vim.keymap.set('n', "<a-k>", ":m .-2<CR>==")
 vim.keymap.set('v', "<a-k>", ":m '<-2<CR>gv=gv")
-vim.keymap.set('i', "<a-k>", "<ESC>:m '<-2<CR>==gi")
+-- vim.keymap.set('i', "<a-k>", "<ESC>:m '<-2<CR>==gi")
 
 vim.keymap.set("n", "<C-h>", "<C-w>h")
 vim.keymap.set("n", "<C-j>", "<C-w>j")
