@@ -1,16 +1,15 @@
 local capabilities = require('cmp_nvim_lsp').default_capabilities()
-local lspconfig = require('lspconfig')
 
-lspconfig.pyright.setup {
+vim.lsp.config('pyright', {
     capabilities = capabilities,
-}
-lspconfig.tsserver.setup {
+})
+vim.lsp.config('tsserver', {
     capabilities = capabilities,
-}
-lspconfig.zls.setup {
+})
+vim.lsp.config('zls',{
     capabilities = capabilities,
-}
-lspconfig.gopls.setup {
+})
+vim.lsp.config('gopls',{
     capabilities = capabilities,
     settings = {
         analyses = {
@@ -19,30 +18,30 @@ lspconfig.gopls.setup {
         staticcheck = true,
         gofumpt = true,
     }
-}
-lspconfig.htmx.setup {
+})
+vim.lsp.config('htmx',{
     capabilities = capabilities,
-}
-lspconfig.tailwindcss.setup {
+})
+vim.lsp.config('tailwindcss',{
     capabilities = capabilities,
-}
-lspconfig.clangd.setup {
+})
+vim.lsp.config('clangd',{
     capabilities = capabilities,
-}
-lspconfig.cmake.setup {
+})
+vim.lsp.config('cmake',{
     capabilities = capabilities,
-}
-lspconfig.html.setup {
+})
+vim.lsp.config('html',{
     capabilities = capabilities,
-}
-lspconfig.cssls.setup {
+})
+vim.lsp.config('cssls',{
     capabilities = capabilities,
-}
-lspconfig.jsonls.setup {
+})
+vim.lsp.config('jsonls',{
     capabilities = capabilities,
-}
+})
 
-lspconfig.lua_ls.setup {
+vim.lsp.config('lua_ls',{
     capabilities = capabilities,
     on_init = function(client)
         local path = client.workspace_folders[1].name
@@ -65,7 +64,7 @@ lspconfig.lua_ls.setup {
         end
         return true
     end
-}
+})
 
 local cmp = require('cmp')
 cmp.setup({
