@@ -30,16 +30,7 @@ require("lazy").setup({
             end,
         },
         {
-            'neovim/nvim-lspconfig',
-            dependencies = {
-                { 'hrsh7th/cmp-nvim-lsp' },
-            }
-        },
-        {
-            'hrsh7th/nvim-cmp',
-            dependencies = {
-                { 'L3MON4D3/LuaSnip' }
-            },
+            'neovim/nvim-lspconfig'
         },
         "cloudhead/neovim-fuzzy",
         "ziglang/zig.vim",

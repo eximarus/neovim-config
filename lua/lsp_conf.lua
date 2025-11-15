@@ -1,6 +1,4 @@
-local lspconfig = require('lspconfig')
-
-lspconfig.lua_ls.setup {
+vim.lsp.config('lua_ls', {
     on_init = function(client)
         if client.workspace_folders then
             local path = client.workspace_folders[1].name
@@ -24,17 +22,9 @@ lspconfig.lua_ls.setup {
     settings = {
         Lua = {}
     }
-}
+})
 
-lspconfig.pyright.setup {}
-
-lspconfig.ts_ls.setup {}
-lspconfig.html.setup {
-    --filetypes = { "html" }
-}
-lspconfig.cssls.setup {}
-lspconfig.jsonls.setup {}
-lspconfig.eslint.setup({
+vim.lsp.config('eslint', {
     on_attach = function(client, bufnr)
         vim.api.nvim_create_autocmd("BufWritePre", {
             buffer = bufnr,
@@ -43,15 +33,7 @@ lspconfig.eslint.setup({
     end,
 })
 
-lspconfig.htmx.setup {}
-lspconfig.tailwindcss.setup {}
-
-lspconfig.zls.setup {}
-lspconfig.clangd.setup {}
-lspconfig.cmake.setup {}
-lspconfig.glsl_analyzer.setup {}
-lspconfig.wgsl_analyzer.setup {}
-lspconfig.slangd.setup {
+vim.lsp.config('slangd',{
     settings = {
         slang = {
             format = {
@@ -59,9 +41,9 @@ lspconfig.slangd.setup {
             }
         }
     }
-}
+})
 
-lspconfig.gopls.setup {
+vim.lsp.config('gopls',{
     settings = {
         analyses = {
             unusedparams = true
@@ -69,24 +51,38 @@ lspconfig.gopls.setup {
         staticcheck = true,
         gofumpt = true,
     }
-}
-lspconfig.templ.setup {}
+})
 
+vim.lsp.enable({
+    'lua_ls',
+    'pyright',
+    'ts_ls',
+    'html', 
+    'cssls', 
+    'jsonls', 
+    'eslint', 
+    'htmx',
+    'tailwindcss',
+    'zls',
+    'clangd',
+    'cmake',
+    'glsl_analyzer',
+    'slangd',
+    'gopls'
+});
 
-local cmp = require('cmp')
-cmp.setup({
-    sources = {
-        { name = 'nvim_lsp' },
-    },
-    mapping = cmp.mapping.preset.insert({
-        ['<CR>'] = cmp.mapping.confirm({ select = false }),
-        ['<C-Space>'] = cmp.mapping.complete(),
-    }),
-    snippet = {
-        expand = function(args)
-            require('luasnip').lsp_expand(args.body)
-        end,
-    },
+vim.diagnostic.config({
+    virtual_text = true,
+    virtual_lines = true
+})
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  callback = function(ev)
+    local client = vim.lsp.get_client_by_id(ev.data.client_id)
+    if client:supports_method('textDocument/completion') then
+      vim.lsp.completion.enable(true, client.id, ev.buf, { autotrigger = true })
+    end
+  end,
 })
 
 vim.api.nvim_create_autocmd({ "BufNewFile", "BufRead" }, {
